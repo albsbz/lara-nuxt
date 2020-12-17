@@ -50,6 +50,14 @@ const routes = [
         component: page("settings/password.vue")
       }
     ]
+  },
+  {
+    path: "/dashboard",
+    component: page("dashboard/index.vue")
+  },
+  {
+    path: "*",
+    component: page("error/notFound.vue")
   }
 ];
 

@@ -31,7 +31,7 @@ module.exports = {
     middleware: ["locale", "check-auth"]
   },
 
-  css: [{ src: "~assets/sass/app.scss", lang: "scss" }],
+  // css: [{ src: "~assets/sass/app.scss", lang: "scss" }],
 
   plugins: [
     "~components/global",
@@ -39,11 +39,10 @@ module.exports = {
     "~plugins/vform",
     "~plugins/axios",
     "~plugins/fontawesome",
-    "~plugins/nuxt-client-init",
-    { src: "~plugins/bootstrap", mode: "client" }
+    "~plugins/nuxt-client-init"
   ],
 
-  modules: ["@nuxtjs/router"],
+  modules: ["@nuxtjs/router", "@nuxtjs/vuetify"],
 
   build: {
     extractCSS: true
