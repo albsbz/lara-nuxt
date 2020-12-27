@@ -1,20 +1,43 @@
 <template>
-  <div class="layout">
-    <!-- <navbar /> -->
-    layout
-    <div class="container mt-4">
-      <nuxt />
-    </div>
-  </div>
+  <v-app id="inspire">
+    <Navbar />
+    <v-main class="grey lighten-3">
+      <v-container>
+        <nuxt />
+      </v-container>
+    </v-main>
+    <v-footer color="primary lighten-1" padless>
+      <v-row justify="center" no-gutters>
+        <v-btn
+          v-for="link in footerLinks"
+          :key="link"
+          color="white"
+          text
+          rounded
+          class="my-2"
+        >
+          {{ link }}
+        </v-btn>
+        <v-col class="primary lighten-2 py-4 text-center white--text" cols="12">
+          <strong>Vuetify</strong>
+        </v-col>
+      </v-row>
+    </v-footer>
+  </v-app>
 </template>
 
 <script>
-// import Navbar from '~/components/Navbar'
+import Navbar from "../components/navbar/NavbarMain";
 
 export default {
-  middleware: ["auth", "admin"],
   components: {
-    // Navbar
-  }
+    Navbar
+  },
+  middleware: ["auth", "admin"],
+  data: () => ({
+    footerLinks: ["Home", "About Us", "Team", "Services", "Blog", "Contact Us"]
+  })
 };
 </script>
+
+<style lang="scss"></style>

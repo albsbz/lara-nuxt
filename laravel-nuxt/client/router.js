@@ -53,6 +53,7 @@ const routes = [
   },
   {
     path: "/dashboard",
+    name: "dashboard.index",
     component: page("dashboard/index.vue")
   },
   {

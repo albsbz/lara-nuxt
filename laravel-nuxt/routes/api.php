@@ -40,7 +40,9 @@ Route::group(
     ],
     function () {
         Route::get('dashboard', [AdminUser::class, 'index']);
+        Route::post('add/product-category', [AdminUser::class, 'index']);
     }
+
 );
 
 Route::group(['middleware' => 'guest:api'], function () {

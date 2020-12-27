@@ -1,99 +1,100 @@
 <template>
-  <div class="row">
-    <div class="col-lg-8 m-auto">
-      <card :title="$t('login')">
-        <form @submit.prevent="login" @keydown="form.onKeydown($event)">
-          <!-- Email -->
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label text-md-right">{{ $t('email') }}</label>
-            <div class="col-md-7">
-              <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" type="email" name="email" class="form-control">
-              <has-error :form="form" field="email" />
-            </div>
-          </div>
+  <v-card class="pa-8">
+    <v-card-title>{{ $t("login") }}</v-card-title>
+    <form @submit.prevent="login" @keydown="form.onKeydown($event)">
+      <!-- Email -->
 
-          <!-- Password -->
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label text-md-right">{{ $t('password') }}</label>
-            <div class="col-md-7">
-              <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" type="password" name="password" class="form-control">
-              <has-error :form="form" field="password" />
-            </div>
-          </div>
+      <v-text-field
+        v-model="form.email"
+        type="email"
+        name="email"
+        class="form-control"
+        :label="$t('email')"
+        :error-messages="form.errors.errors.email"
+        :error="form.errors.has('email')"
+      />
 
-          <!-- Remember Me -->
-          <div class="form-group row">
-            <div class="col-md-3" />
-            <div class="col-md-7 d-flex">
-              <checkbox v-model="remember" name="remember">
-                {{ $t('remember_me') }}
-              </checkbox>
+      <!-- Password -->
+      <v-text-field
+        v-model="form.password"
+        type="password"
+        name="password"
+        class="form-control"
+        :label="$t('password')"
+        :error-messages="form.errors.errors.password"
+        :error="form.errors.has('password')"
+      />
 
-              <router-link :to="{ name: 'password.request' }" class="small ml-auto my-auto">
-                {{ $t('forgot_password') }}
-              </router-link>
-            </div>
-          </div>
+      <!-- Remember Me -->
 
-          <div class="form-group row">
-            <div class="col-md-7 offset-md-3 d-flex">
-              <!-- Submit Button -->
-              <v-button :loading="form.busy">
-                {{ $t('login') }}
-              </v-button>
+      <v-checkbox
+        v-model="remember"
+        name="remember"
+        :label="$t('remember_me')"
+      />
 
-              <!-- GitHub Login Button -->
-              <login-with-github />
-            </div>
-          </div>
-        </form>
-      </card>
-    </div>
-  </div>
+      <router-link
+        :to="{ name: 'password.request' }"
+        class="small ml-auto my-auto"
+      >
+        {{ $t("forgot_password") }}
+      </router-link>
+      <br />
+
+      <!-- Submit Button -->
+      <v-btn :loading="form.busy" type="submit">
+        {{ $t("login") }}
+      </v-btn>
+
+      <!-- GitHub Login Button -->
+      <login-with-github />
+    </form>
+  </v-card>
 </template>
 
 <script>
-import Form from 'vform'
+import Form from "vform";
 
 export default {
-  middleware: 'guest',
+  layout: "simple",
+  middleware: "guest",
 
   data: () => ({
     form: new Form({
-      email: '',
-      password: ''
+      email: "",
+      password: ""
     }),
     remember: false
   }),
 
-  head () {
-    return { title: this.$t('login') }
+  head() {
+    return { title: this.$t("login") };
   },
 
   methods: {
-    async login () {
-      let data
+    async login() {
+      let data;
 
       // Submit the form.
       try {
-        const response = await this.form.post('/login')
-        data = response.data
+        const response = await this.form.post("/login");
+        data = response.data;
       } catch (e) {
-        return
+        return;
       }
 
       // Save the token.
-      this.$store.dispatch('auth/saveToken', {
+      this.$store.dispatch("auth/saveToken", {
         token: data.token,
         remember: this.remember
-      })
+      });
 
       // Fetch the user.
-      await this.$store.dispatch('auth/fetchUser')
+      await this.$store.dispatch("auth/fetchUser");
 
       // Redirect home.
-      this.$router.push({ name: 'home' })
+      this.$router.push({ name: "welcome" });
     }
   }
-}
+};
 </script>

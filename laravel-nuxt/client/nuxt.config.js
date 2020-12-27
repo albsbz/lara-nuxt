@@ -42,8 +42,17 @@ module.exports = {
     "~plugins/nuxt-client-init"
   ],
 
-  modules: ["@nuxtjs/router", "@nuxtjs/vuetify"],
-
+  modules: ["@nuxtjs/router"],
+  buildModules: ["@nuxtjs/vuetify"],
+  vuetify: {
+    /* module options */
+    defaultAssets: {
+      font: {
+        family: "Roboto"
+      },
+      icons: "mdi"
+    }
+  },
   build: {
     extractCSS: true
   },
