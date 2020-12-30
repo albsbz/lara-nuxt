@@ -11,6 +11,7 @@ use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Admin\UserController as AdminUser;
+use App\Http\Controllers\Admin\ProductCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,13 +37,24 @@ Route::group(['middleware' => 'auth:api'], function () {
 Route::group(
     [
 
-        'middleware' => ['auth:api', 'isAdmin'],
+        'middleware' => [
+            // 'auth:api',
+            // 'isAdmin'
+        ],
+        'prefix' => 'dashboard'
     ],
     function () {
-        Route::get('dashboard', [AdminUser::class, 'index']);
-        Route::post('add/product-category', [AdminUser::class, 'index']);
+        Route::get('/', [AdminUser::class, 'index']);
+        Route::group(
+            ['prefix' => 'product-category'],
+            function () {
+                Route::post('add', [ProductCategoryController::class, 'store']);
+                Route::get('all', [ProductCategoryController::class, 'index']);
+                Route::delete('/', [ProductCategoryController::class, 'destroy']);
+                Route::post('/edit', [ProductCategoryController::class, 'update']);
+            }
+        );
     }
-
 );
 
 Route::group(['middleware' => 'guest:api'], function () {

@@ -27,6 +27,13 @@
         label="Slug"
         name="slug"
       />
+      <v-select
+        v-model="form.parent_id"
+        item-value="id"
+        item-text="name"
+        :items="allItems"
+        label="Parent category"
+      />
       <v-btn :loading="form.busy" type="submit">
         {{ $t("register") }}
       </v-btn>
@@ -37,9 +44,10 @@
 import Form from "vform";
 
 export default {
+  props: ["allItems"],
   data: () => ({
     form: new Form({
-      parent_id: 0,
+      parent_id: 1,
       name: "",
       description: "",
       slug: ""
@@ -51,18 +59,12 @@ export default {
       let data;
 
       try {
-        // const response = await this.form.post("/add/product-category");
-        // data = response.data;
+        const { data } = await this.form.post("dashboard/product-category/add");
+        // data = response.data
+        this.$emit("baseTab", data);
       } catch (e) {
         return;
       }
-
-      // Redirect home.
-      // this.$router.push({
-      //   path: "/dashboard",
-      //   hash: "#list_product_categories"
-      // });
-      this.$emit("baseTab");
     }
   }
 };

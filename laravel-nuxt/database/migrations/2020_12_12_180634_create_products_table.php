@@ -16,7 +16,7 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->integer('category_id')->unsigned()->nullable();
+            $table->bigInteger('category_id')->unsigned()->default(1);
             $table->string('imgPath', 128)->nullable();
             $table->string('gallery')->nullable();
             $table->string('name', 64);
@@ -24,6 +24,7 @@ class CreateProductsTable extends Migration
             $table->string('description')->nullable();
             $table->string('slug', 64)->unique();
             $table->boolean('instock')->default(0);
+            $table->foreign('category_id')->references('id')->on('product_categories');
         });
     }
 

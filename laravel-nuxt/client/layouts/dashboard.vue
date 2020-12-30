@@ -33,7 +33,7 @@ export default {
   components: {
     Navbar
   },
-  middleware: ["auth", "admin"],
+  // middleware: ["auth", "admin"],
   data: () => ({
     footerLinks: ["Home", "About Us", "Team", "Services", "Blog", "Contact Us"]
   })

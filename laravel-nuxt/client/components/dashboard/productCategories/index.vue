@@ -3,50 +3,88 @@
     <v-tabs v-model="tabs" fixed-tabs>
       <v-tabs-slider />
       <v-tab href="#list_product_categories" class="primary--text">
-        <v-icon class="text-caption">mdi-format-list-bulleted</v-icon>
+        <v-icon class="text-caption">
+          mdi-format-list-bulleted
+        </v-icon>
       </v-tab>
 
       <v-tab href="#add_product_categories" class="primary--text">
-        <v-icon class="text-caption">mdi-plus-box-multiple-outline</v-icon>
+        <v-icon class="text-caption">
+          mdi-plus-box-multiple-outline
+        </v-icon>
       </v-tab>
 
       <v-tab href="#edit_product_categories" class="primary--text">
-        <v-icon class="text-caption">mdi-file-edit-outline</v-icon>
+        <v-icon class="text-caption">
+          mdi-file-edit-outline
+        </v-icon>
       </v-tab>
     </v-tabs>
     <v-tabs-items v-model="tabs">
       <v-tab-item value="list_product_categories">
         <v-card flat>
-          <v-card-text>1</v-card-text>
+          <All
+            :allItems="allItems"
+            @deleteItem="deleteItem"
+            @baseTab="baseTab"
+          />
         </v-card>
       </v-tab-item>
       <v-tab-item value="add_product_categories">
         <v-card flat>
-          <Add @baseTab="baseTab" />
+          <Add :allItems="allItems" @baseTab="baseTab" />
         </v-card>
       </v-tab-item>
       <v-tab-item value="edit_product_categories">
         <v-card flat>
-          <v-card-text>3</v-card-text>
+          3
         </v-card>
       </v-tab-item>
     </v-tabs-items>
   </div>
 </template>
 <script>
+import axios from "axios";
 import Add from "./add";
+import All from "./all";
 export default {
   components: {
-    Add
+    Add,
+    All
   },
   data() {
     return {
-      tabs: null
+      tabs: null,
+      allItems: []
     };
   },
+  created() {
+    this.initialize();
+  },
   methods: {
-    baseTab() {
-      this.tabs = "list_product_categories";
+    async initialize() {
+      try {
+        const { data } = await axios.get("/dashboard/product-category/all");
+        this.allItems = data.data ? data.data : data; // if pagination needed
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    baseTab(data) {
+      if (this.tabs != "list_product_categories") {
+        this.tabs = "list_product_categories";
+      }
+      this.allItems = data.data ? data.data : data;
+    },
+    async deleteItem(id) {
+      try {
+        const { data } = await axios.delete("/dashboard/product-category/", {
+          data: { id }
+        });
+        this.allItems = data.data ? data.data : data; // if pagination needed
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
 };
