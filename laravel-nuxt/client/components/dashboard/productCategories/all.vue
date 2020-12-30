@@ -29,7 +29,7 @@
                     <v-row>
                       <v-col cols="12" sm="6" md="4">
                         <v-text-field
-                          v-model="editedItem.name"
+                          v-model="form.name"
                           :error-messages="form.errors.errors.name"
                           :error="form.errors.has('name')"
                           :label="$t('name')"
@@ -38,7 +38,7 @@
                       </v-col>
                       <v-col cols="12" sm="6" md="4">
                         <v-text-field
-                          v-model="editedItem.description"
+                          v-model="form.description"
                           :error-messages="form.errors.errors.description"
                           :error="form.errors.has('description')"
                           label="Description"
@@ -47,7 +47,7 @@
                       </v-col>
                       <v-col cols="12" sm="6" md="4">
                         <v-text-field
-                          v-model="editedItem.slug"
+                          v-model="form.slug"
                           :error-messages="form.errors.errors.slug"
                           :error="form.errors.has('slug')"
                           label="Slug"
@@ -56,7 +56,7 @@
                       </v-col>
                       <v-col cols="12" sm="6" md="4">
                         <v-select
-                          v-model="editedItem.parent_id"
+                          v-model="form.parent_id"
                           item-value="id"
                           item-text="name"
                           :items="allItems"
@@ -159,13 +159,13 @@ export default {
     ],
 
     editedIndex: -1,
-    editedItem: {
+    form: new Form({
       id: 0,
       parent_id: 1,
       name: "",
       description: "",
       slug: ""
-    },
+    }),
     defaultItem: {
       id: 0,
       parent_id: 1,
@@ -178,9 +178,6 @@ export default {
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    },
-    form() {
-      return new Form(this.editedItem);
     }
   },
 
@@ -196,25 +193,27 @@ export default {
   methods: {
     editItem(item) {
       this.editedIndex = this.allItems.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.form = new Form(item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editedIndex = this.allItems.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      // this.editedIndex = this.allItems.indexOf(item);
+      // this.editedItem = Object.assign({}, item);
+      this.form = new Form(item);
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
-      this.$emit("deleteItem", this.editedItem.id);
+      this.$emit("deleteItem", this.form.id);
       this.closeDelete();
     },
 
     close() {
       this.dialog = false;
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
+        // this.editedItem = Object.assign({}, this.defaultItem);
+        this.form = new Form(this.defaultItem);
         this.editedIndex = -1;
       });
     },
@@ -222,7 +221,8 @@ export default {
     closeDelete() {
       this.dialogDelete = false;
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
+        // this.editedItem = Object.assign({}, this.defaultItem);
+        this.form = new Form(this.defaultItem);
         this.editedIndex = -1;
       });
     },

@@ -88,8 +88,8 @@ class ProductCategoryController extends Controller
         $data = $request->validate([
             'name' => 'required',
             'description' => 'required',
-            // 'slug' => 'required|unique:App\Models\ProductCategory',
-            'slug' => 'required',
+            'slug' => 'required|unique:App\Models\ProductCategory,slug,' . $request->id,
+            // 'slug' => 'required',
             'parent_id' => 'required'
 
         ]);
@@ -98,13 +98,8 @@ class ProductCategoryController extends Controller
         if (!isset($category)) {
             return response()->json([], 400);
         };
-        // $category->update($data);
-        $category->name = $data['name'];
-        $category->parent_id = $data['parent_id'];
-        $category->description = $data["description"];
-        $category->slug = $data['slug'];
 
-        if ($category->save()) {
+        if ($category->update($data)) {
             return $this->index();
         } else {
             return response()->json([], 400);
