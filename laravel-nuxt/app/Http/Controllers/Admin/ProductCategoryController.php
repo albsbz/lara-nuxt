@@ -16,11 +16,7 @@ class ProductCategoryController extends Controller
     public function index(Request $request = null)
 
     {
-        if (isset($request->perpage)) {
-            $responce = ProductCategory::with('parent')->paginate($request->perpage);
-        } else {
-            $responce = ProductCategory::with('parent')->get();
-        }
+        $responce = ProductCategory::with('parent')->get();
         return json_encode($responce);
     }
 

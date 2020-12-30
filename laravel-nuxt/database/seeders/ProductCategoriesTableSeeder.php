@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ProductCategory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -20,5 +21,6 @@ class ProductCategoriesTableSeeder extends Seeder
             'slug' => 'basic',
             'parent_id' => null
         ]);
+        ProductCategory::factory(20)->create();
     }
 }

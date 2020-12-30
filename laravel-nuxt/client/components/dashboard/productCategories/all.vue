@@ -9,14 +9,8 @@
       <template #top>
         <v-toolbar flat>
           <v-toolbar-title>Product categories</v-toolbar-title>
-          <!-- <v-divider class="mx-4" inset vertical></v-divider> -->
           <v-spacer />
           <v-dialog v-model="dialog" max-width="500px">
-            <!-- <template v-slot:activator="{ on, attrs }">
-              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                New Item
-              </v-btn>
-            </template> -->
             <v-card>
               <form @keydown="form.onKeydown($event)" @submit.prevent="save">
                 <v-card-title>
@@ -63,34 +57,6 @@
                           label="Parent category"
                         />
                       </v-col>
-
-                      <!-- <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.name"
-                        label="Dessert name"
-                      />
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.calories"
-                        label="Calories"
-                      />
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.fat" label="Fat (g)" />
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.carbs"
-                        label="Carbs (g)"
-                      />
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.protein"
-                        label="Protein (g)"
-                      />
-                    </v-col> -->
                     </v-row>
                   </v-container>
                 </v-card-text>
@@ -221,7 +187,6 @@ export default {
     closeDelete() {
       this.dialogDelete = false;
       this.$nextTick(() => {
-        // this.editedItem = Object.assign({}, this.defaultItem);
         this.form = new Form(this.defaultItem);
         this.editedIndex = -1;
       });
@@ -232,11 +197,9 @@ export default {
         const { data } = await this.form.post(
           "dashboard/product-category/edit"
         );
-        // data = response.data
+
         this.$emit("baseTab", data);
       } catch (e) {
-        console.log(e);
-        this.$forceUpdate();
         return;
       }
       this.close();

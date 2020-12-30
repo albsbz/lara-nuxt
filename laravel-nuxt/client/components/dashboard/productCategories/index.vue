@@ -13,12 +13,6 @@
           mdi-plus-box-multiple-outline
         </v-icon>
       </v-tab>
-
-      <v-tab href="#edit_product_categories" class="primary--text">
-        <v-icon class="text-caption">
-          mdi-file-edit-outline
-        </v-icon>
-      </v-tab>
     </v-tabs>
     <v-tabs-items v-model="tabs">
       <v-tab-item value="list_product_categories">
@@ -33,11 +27,6 @@
       <v-tab-item value="add_product_categories">
         <v-card flat>
           <Add :allItems="allItems" @baseTab="baseTab" />
-        </v-card>
-      </v-tab-item>
-      <v-tab-item value="edit_product_categories">
-        <v-card flat>
-          3
         </v-card>
       </v-tab-item>
     </v-tabs-items>
@@ -65,7 +54,7 @@ export default {
     async initialize() {
       try {
         const { data } = await axios.get("/dashboard/product-category/all");
-        this.allItems = data.data ? data.data : data; // if pagination needed
+        this.allItems = data; // if pagination needed
       } catch (e) {
         console.log(e);
       }
@@ -81,7 +70,7 @@ export default {
         const { data } = await axios.delete("/dashboard/product-category/", {
           data: { id }
         });
-        this.allItems = data.data ? data.data : data; // if pagination needed
+        this.allItems = data; // if pagination needed
       } catch (e) {
         console.log(e);
       }
