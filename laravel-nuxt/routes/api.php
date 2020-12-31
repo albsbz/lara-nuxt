@@ -4,14 +4,16 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\OAuthController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\Admin\UserController as AdminUser;
+use App\Http\Controllers\Admin\ProductFeatureController;
 use App\Http\Controllers\Admin\ProductCategoryController;
+use App\Http\Controllers\Admin\UserController as AdminUser;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +54,24 @@ Route::group(
                 Route::get('all', [ProductCategoryController::class, 'index']);
                 Route::delete('/', [ProductCategoryController::class, 'destroy']);
                 Route::post('/edit', [ProductCategoryController::class, 'update']);
+            }
+        );
+        Route::group(
+            ['prefix' => 'product-feature'],
+            function () {
+                Route::post('add', [ProductFeatureController::class, 'store']);
+                Route::get('all', [ProductFeatureController::class, 'index']);
+                Route::delete('/', [ProductFeatureController::class, 'destroy']);
+                Route::post('/edit', [ProductFeatureController::class, 'update']);
+            }
+        );
+        Route::group(
+            ['prefix' => 'product'],
+            function () {
+                Route::post('add', [ProductController::class, 'store']);
+                Route::get('all', [ProductController::class, 'index']);
+                Route::delete('/', [ProductController::class, 'destroy']);
+                Route::post('/edit', [ProductController::class, 'update']);
             }
         );
     }

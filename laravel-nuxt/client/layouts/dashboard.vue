@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <Navbar />
+    <AppNavbar />
     <v-main class="grey lighten-3">
       <v-container>
         <nuxt />
@@ -27,11 +27,11 @@
 </template>
 
 <script>
-import Navbar from "../components/navbar/NavbarMain";
+import AppNavbar from "../components/navbar/NavbarMain";
 
 export default {
   components: {
-    Navbar
+    AppNavbar
   },
   // middleware: ["auth", "admin"],
   data: () => ({

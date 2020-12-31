@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\ProductCategory;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\ProductFeature;
+use App\Http\Controllers\Controller;
 
-class ProductCategoryController extends Controller
+class ProductFeatureController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class ProductCategoryController extends Controller
     public function index(Request $request = null)
 
     {
-        $responce = ProductCategory::with('parent')->get();
+        $responce = ProductFeature::all();
         return json_encode($responce);
     }
 
@@ -30,13 +30,9 @@ class ProductCategoryController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required',
-            'description' => 'required',
-            'slug' => 'required|unique:App\Models\ProductCategory',
-            'parent_id' => 'required'
-
+            'name' => 'required|unique:App\Models\ProductFeature',
         ]);
-        ProductCategory::create($data);
+        ProductFeature::create($data);
 
         return $this->index();
     }
@@ -52,20 +48,15 @@ class ProductCategoryController extends Controller
     public function update(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required',
-            'description' => 'required',
-            'slug' => 'required|unique:App\Models\ProductCategory,slug,' . $request->id,
-            // 'slug' => 'required',
-            'parent_id' => 'required'
-
+            'name' => 'required|unique:App\Models\ProductFeature,name,' . $request->id
         ]);
 
-        $category = ProductCategory::find($request->id);
-        if (!isset($category)) {
+        $feature = ProductFeature::find($request->id);
+        if (!isset($feature)) {
             return response()->json([], 400);
         };
 
-        if ($category->update($data)) {
+        if ($feature->update($data)) {
             return $this->index();
         } else {
             return response()->json([], 400);
@@ -80,11 +71,11 @@ class ProductCategoryController extends Controller
      */
     public function destroy(Request $request)
     {
-        $category = ProductCategory::find($request->id);
-        if (!isset($category)) {
+        $feature = ProductFeature::find($request->id);
+        if (!isset($feature)) {
             return response()->json([], 400);
         };
-        $category->delete();
+        $feature->delete();
         return $this->index();
     }
 }

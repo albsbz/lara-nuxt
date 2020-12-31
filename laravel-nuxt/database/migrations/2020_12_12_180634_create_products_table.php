@@ -17,12 +17,10 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->bigInteger('category_id')->unsigned()->default(1);
-            $table->string('imgPath', 128)->nullable();
-            $table->string('gallery')->nullable();
-            $table->string('name', 64);
+            $table->string('name', 128);
             $table->integer('price')->unsigned();
             $table->string('description')->nullable();
-            $table->string('slug', 64)->unique();
+            $table->string('slug', 128)->unique();
             $table->boolean('instock')->default(0);
             $table->foreign('category_id')->references('id')->on('product_categories');
         });
