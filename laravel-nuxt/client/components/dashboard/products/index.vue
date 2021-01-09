@@ -18,7 +18,7 @@
       <v-tab-item value="list_products">
         <v-card flat>
           <All
-            :allItems="allItems"
+            :all-items="allItems"
             @deleteItem="deleteItem"
             @baseTab="baseTab"
           />
@@ -26,7 +26,7 @@
       </v-tab-item>
       <v-tab-item value="add_products">
         <v-card flat>
-          <Add :allItems="allItems" @baseTab="baseTab" />
+          <Add :all-items="allItems" @baseTab="baseTab" />
         </v-card>
       </v-tab-item>
     </v-tabs-items>
@@ -47,7 +47,7 @@ export default {
       allItems: []
     };
   },
-  created() {
+  beforeMount() {
     this.initialize();
   },
   methods: {

@@ -4,13 +4,6 @@
       Add product
     </v-card-title>
     <form @submit.prevent="addProduct" @keydown="form.onKeydown($event)">
-      <!-- name: "",
-      category: 1,
-      description: "",
-      price:0,
-      slug: "",
-      instock:false,
-      image:[] -->
       <v-text-field
         v-model="form.name"
         :error-messages="form.errors.errors.name"
@@ -23,8 +16,31 @@
         item-value="id"
         item-text="name"
         :items="allCategories"
+        :error-messages="form.errors.errors.category"
+        :error="form.errors.has('category')"
         label="Category"
       />
+      <v-select
+        v-model="form.features"
+        item-text="name"
+        item-value="id"
+        :items="allFeatures"
+        label="Features"
+        attach
+        chips
+        multiple
+      />
+      <div v-if="form.features">
+        <v-text-field
+          v-for="(feature, key) in form.features"
+          :key="key"
+          v-model="form.featureValues[key]"
+          :error-messages="form.errors.errors.features"
+          :error="form.errors.has('features')"
+          :label="allFeatures.find(el => el.id == feature).name"
+        />
+        <!-- :name="features[key].value" -->
+      </div>
       <v-text-field
         v-model="form.description"
         :error-messages="form.errors.errors.description"
@@ -33,9 +49,9 @@
         name="description"
       />
       <v-text-field
-        v-model="form.price"
+        v-model.number="form.price"
         type="number"
-        :error-messages="form.errors.errors.description"
+        :error-messages="form.errors.errors.price"
         :error="form.errors.has('price')"
         label="price"
         name="price"
@@ -52,18 +68,35 @@
         item-value="v"
         item-text="n"
         :items="[
-          { v: true, n: 'yes' },
-          { v: false, n: 'no' }
+          { v: 1, n: 'yes' },
+          { v: 0, n: 'no' }
         ]"
         label="In stock"
       />
-      <!-- <v-select
-        v-model="form.parent_id"
-        item-value="id"
-        item-text="name"
-        :items="allItems"
-        label="Parent category"
-      /> -->
+      <v-file-input
+        v-model="form.images"
+        multiple
+        chips
+        accept="image/*"
+        label="File input"
+        :error-messages="form.errors.errors.images"
+        :error="form.errors.has('images')"
+        @change="addFiles"
+        @click:clear="clearFiles"
+      >
+        <template #selection="{ file, index }">
+          <!-- <v-chip v-if="file.name" > -->
+          <v-img
+            :src="imagesUrls[index]"
+            :alt="file.name"
+            contain
+            max-height="50"
+            max-width="50"
+            class="ma-5"
+          />
+          <!-- </v-chip> -->
+        </template>
+      </v-file-input>
       <v-btn :loading="form.busy" type="submit">
         {{ $t("register") }}
       </v-btn>
@@ -71,31 +104,34 @@
   </div>
 </template>
 <script>
-import Form from "vform";
 import axios from "axios";
+import Form from "~/plugins/extendedFormFileUpload.js";
 
 export default {
   props: ["allItems"],
   data: () => ({
     form: new Form({
       name: "",
+      images: null,
       category: 1,
       description: "",
       price: 0,
       slug: "",
-      instock: false,
-      images: []
+      instock: 0,
+      features: null,
+      featureValues: []
     }),
-    allFetures: [],
-    allCategories: []
+    allFeatures: [],
+    allCategories: [],
+    imagesUrls: []
   }),
-  created() {
+  beforeMount() {
     this.initialize();
   },
   methods: {
     async initialize() {
       try {
-        this.allFetures = await (
+        this.allFeatures = await (
           await axios.get("/dashboard/product-feature/all")
         ).data;
         this.allCategories = await (
@@ -105,10 +141,37 @@ export default {
         console.log(e);
       }
     },
+
+    addFiles(files) {
+      // console.log(file);
+      files.forEach(file => {
+        this.readFile(file).then(url => {
+          this.imagesUrls.push(url);
+        });
+      });
+      // this.readFile(file[0]).then(url => {
+      //   this.imagesUrls.push(url);
+      // });
+    },
+    clearFiles() {
+      this.imagesUrls = [];
+    },
+    readFile(file) {
+      const reader = new FileReader();
+      return new Promise((resolve, reject) => {
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          resolve(reader);
+        };
+        reader.onerror = error => reject(error);
+      }).then(read => {
+        return read.result;
+      });
+    },
     async addProduct() {
       try {
+        // this.form.features = this.features;
         const { data } = await this.form.post("dashboard/product/add");
-        // data = response.data
         this.$emit("baseTab", data);
       } catch (e) {}
     }

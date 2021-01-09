@@ -18,10 +18,12 @@
     "jquery": "^3.5.1",
     "js-cookie": "^2.2.1",
     "nuxt": "^2.14.7",
+    "object-to-formdata": "^4.1.0",
     "popper.js": "^1.16.1",
     "sweetalert2": "^10.10.4",
     "vform": "^1.0.1",
-    "vue-i18n": "^8.22.2"
+    "vue-i18n": "^8.22.2",
+    "vuedraggable": "^2.24.3"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.12.1",

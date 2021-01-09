@@ -47,7 +47,7 @@ export default {
       allItems: []
     };
   },
-  created() {
+  beforeMount() {
     this.initialize();
   },
   methods: {

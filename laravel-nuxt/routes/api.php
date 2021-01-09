@@ -62,7 +62,7 @@ Route::group(
                 Route::post('add', [ProductFeatureController::class, 'store']);
                 Route::get('all', [ProductFeatureController::class, 'index']);
                 Route::delete('/', [ProductFeatureController::class, 'destroy']);
-                Route::post('/edit', [ProductFeatureController::class, 'update']);
+                Route::post('edit', [ProductFeatureController::class, 'update']);
             }
         );
         Route::group(
@@ -71,7 +71,7 @@ Route::group(
                 Route::post('add', [ProductController::class, 'store']);
                 Route::get('all', [ProductController::class, 'index']);
                 Route::delete('/', [ProductController::class, 'destroy']);
-                Route::post('/edit', [ProductController::class, 'update']);
+                Route::post('edit', [ProductController::class, 'update']);
             }
         );
     }

@@ -21,9 +21,10 @@ class ProductImagesTable extends Migration
         Schema::create('productImage_product', function (Blueprint $table) {
             $table->bigInteger('image_id')->unsigned();
             $table->bigInteger('product_id')->unsigned();
+            $table->integer('order')->unsigned()->default(0);
             $table->timestamps();
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->foreign('image_id')->references('id')->on('productImages');
+            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('image_id')->references('id')->on('productImages')->onDelete('cascade');
         });
     }
 

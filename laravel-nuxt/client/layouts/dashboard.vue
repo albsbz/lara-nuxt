@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <AppNavbar />
+    <app-navbar />
     <v-main class="grey lighten-3">
       <v-container>
         <nuxt />

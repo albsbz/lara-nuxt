@@ -30,10 +30,9 @@ class ProductFeatureController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|unique:App\Models\ProductFeature',
+            'name' => 'required|unique:App\Models\ProductFeature,name',
         ]);
         ProductFeature::create($data);
-
         return $this->index();
     }
 

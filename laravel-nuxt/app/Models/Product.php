@@ -29,6 +29,6 @@ class Product extends Model
     }
     public function features()
     {
-        return $this->belongsTo(ProductFeature::class);
+        return $this->belongsToMany(ProductFeature::class, 'productFeature_product')->withPivot('value');;
     }
 }

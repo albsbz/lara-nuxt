@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <Navbar />
+    <app-navbar />
     <v-main class="grey lighten-3">
       <v-container>
         <v-row>
@@ -39,11 +39,11 @@
 </template>
 
 <script>
-import Navbar from "../components/navbar/NavbarMain";
+import AppNavbar from "../components/navbar/NavbarMain";
 
 export default {
   components: {
-    Navbar
+    AppNavbar
   },
   data: () => ({
     footerLinks: ["Home", "About Us", "Team", "Services", "Blog", "Contact Us"]

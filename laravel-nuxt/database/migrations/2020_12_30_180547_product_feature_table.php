@@ -18,13 +18,13 @@ class ProductFeatureTable extends Migration
             $table->string('name');
             $table->timestamps();
         });
-        Schema::create('product_features_product', function (Blueprint $table) {
-            $table->bigInteger('feature_id')->unsigned();
+        Schema::create('productFeature_product', function (Blueprint $table) {
+            $table->bigInteger('product_feature_id')->unsigned();
             $table->bigInteger('product_id')->unsigned();
-            $table->json('value');
+            $table->text('value');
             $table->timestamps();
-            $table->foreign('feature_id')->references('id')->on('product_features')->onDelete('cascade');
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('product_feature_id')->references('id')->on('product_features');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }
 
@@ -36,8 +36,8 @@ class ProductFeatureTable extends Migration
     public function down()
     {
         Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('feature_product');
-        Schema::dropIfExists('features');
+        Schema::dropIfExists('productFeature_product');
+        Schema::dropIfExists('product_features');
         Schema::enableForeignKeyConstraints();
     }
 }
