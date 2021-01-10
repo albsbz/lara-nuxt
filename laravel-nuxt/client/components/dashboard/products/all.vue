@@ -188,8 +188,8 @@
   </div>
 </template>
 <script>
-import Form from "vform";
 import axios from "axios";
+import Form from "~/plugins/extendedFormFileUpload.js";
 import appProductGallery from "~/components/global/ProductGallery";
 
 export default {
@@ -371,23 +371,26 @@ export default {
     async save() {
       try {
         this.form.images = [];
-        this.imagesSequence.foreach(image => {
+        this.form.imagesSequence = [];
+        this.form.newImages = [];
+        this.imagesSequence.forEach((image, i) => {
           this.form.imagesSequence.push(image.id);
           if (image.id === null) {
             this.form.newImages.push(image.file);
           }
           this.form.images.push(image.url);
         });
+        console.log(this.form.newImages);
         const { data } = await this.form.post("dashboard/product/edit");
 
         this.$emit("baseTab", data);
       } catch (e) {
+        console.log(e);
         return;
       }
       this.close();
     },
     clearUploadField() {
-      console.log(`clearUploadField`);
       this.preUploadImages = [];
       this.preUploadImagesUrls = [];
     }

@@ -21,7 +21,7 @@ class Product extends Model
     ];
     public function images()
     {
-        return $this->belongsToMany(Image::class, 'productImage_product');
+        return $this->belongsToMany(Image::class, 'productImage_product')->orderBy('order', 'ASC')->withPivot('order');;
     }
     public function category()
     {
@@ -29,6 +29,6 @@ class Product extends Model
     }
     public function features()
     {
-        return $this->belongsToMany(ProductFeature::class, 'productFeature_product')->withPivot('value');;
+        return $this->belongsToMany(ProductFeature::class, 'productFeature_product')->withPivot('value');
     }
 }

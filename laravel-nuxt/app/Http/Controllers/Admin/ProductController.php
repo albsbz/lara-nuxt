@@ -93,32 +93,39 @@ class ProductController extends Controller
             'featureValues' => 'nullable',
             'imagesSequence' => 'nullable',
         ]);
-        Log::debug($data);
+
         $product = Product::find($request->id);
         if (!isset($product)) {
             return response()->json([], 400);
         };
         //images['url', 'file'], imagesSequence['id']
         if ($product->update($data)) {
-            if (isset($data['images'])) {
-                foreach ($product->images as $image) {
-                    if (in_array($image->url, $request->images)) {
-                        $order = array_search($image->id, $request->imagesSequence);
-                        $image->pivot->order = $order;
-                    } else {
-                        $image->delete();
-                        $path = storage_path('app/public/images/' . basename($image->url));
-                        if (file_exists($path)) {
-                            unlink($path);
-                        }
+
+            foreach ($product->images as $image) {
+                if (isset($data['images']) && in_array($image->url, $request->images)) {
+                    $order = array_search($image->id, $request->imagesSequence);
+                    Log::debug($image->pivot->order);
+                    Log::debug($order);
+                    $product->images()->updateExistingPivot($image->id, [
+                        'order' => $order
+                    ]);
+                } else {
+                    $image->delete();
+                    $path = storage_path('app/public/images/' . basename($image->url));
+                    if (file_exists($path)) {
+                        unlink($path);
                     }
                 }
-                foreach ($request->file('newImages') as $key => $image) {
+            }
+            $newImages = $request->file('newImages');
+            if (isset($newImages)) {
+                foreach ($newImages as $key => $image) {
                     $path = $image->store('public/images');
                     $newImage = Image::create(['url' => '/storage/images/' . basename($path)]);
                     $product->images()->attach($newImage->id,  ['order' => array_keys($request->imagesSequence, null)[$key]]);
                 }
             }
+
             // $product->features()->detach()->delete();
             // if (isset($data['features'])) {
 
