@@ -51,7 +51,7 @@
               <img
                 :src="user.photo_url"
                 class="rounded-circle profile-photo mr-1"
-              />
+              ></img>
               {{ user.name }}
             </a>
             <div class="dropdown-menu">

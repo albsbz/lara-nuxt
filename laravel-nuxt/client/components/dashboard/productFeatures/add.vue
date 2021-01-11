@@ -22,7 +22,7 @@
 </template>
 <script>
 import Form from "vform";
-
+import * as service from "~/services/ProductFeatures";
 export default {
   props: ["allItems"],
   data: () => ({
@@ -33,15 +33,8 @@ export default {
 
   methods: {
     async addFeature() {
-      let data;
-
-      try {
-        const { data } = await this.form.post("dashboard/product-feature/add");
-        // data = response.data
-        this.$emit("baseTab", data);
-      } catch (e) {
-        return;
-      }
+      const data = await service.addItem(this.form);
+      this.$emit("baseTab", data);
     }
   }
 };

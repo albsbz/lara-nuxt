@@ -33,9 +33,9 @@
   </div>
 </template>
 <script>
-import axios from "axios";
 import Add from "./add";
 import All from "./all";
+import * as service from "~/services/Products";
 export default {
   components: {
     Add,
@@ -52,12 +52,7 @@ export default {
   },
   methods: {
     async initialize() {
-      try {
-        const { data } = await axios.get("/dashboard/product/all");
-        this.allItems = data; // if pagination needed
-      } catch (e) {
-        console.log(e);
-      }
+      this.allItems = await service.getAll();
     },
     baseTab(data) {
       if (this.tabs != "list_products") {
@@ -66,14 +61,7 @@ export default {
       this.allItems = data;
     },
     async deleteItem(id) {
-      try {
-        const { data } = await axios.delete("/dashboard/product/", {
-          data: { id }
-        });
-        this.allItems = data; // if pagination needed
-      } catch (e) {
-        console.log(e);
-      }
+      this.allItems = await service.deleteItem(id);
     }
   }
 };

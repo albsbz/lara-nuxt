@@ -104,7 +104,9 @@
   </div>
 </template>
 <script>
-import axios from "axios";
+import * as service from "~/services/Products";
+import * as productFeatures from "~/services/ProductFeatures";
+import * as productCategories from "~/services/ProductCategories";
 import Form from "~/plugins/extendedFormFileUpload.js";
 
 export default {
@@ -130,16 +132,8 @@ export default {
   },
   methods: {
     async initialize() {
-      try {
-        this.allFeatures = await (
-          await axios.get("/dashboard/product-feature/all")
-        ).data;
-        this.allCategories = await (
-          await axios.get("/dashboard/product-category/all")
-        ).data;
-      } catch (e) {
-        console.log(e);
-      }
+      this.allFeatures = await productFeatures.getAll();
+      this.allCategories = await productCategories.getAll();
     },
 
     addFiles(files) {
@@ -169,11 +163,8 @@ export default {
       });
     },
     async addProduct() {
-      try {
-        // this.form.features = this.features;
-        const { data } = await this.form.post("dashboard/product/add");
-        this.$emit("baseTab", data);
-      } catch (e) {}
+      const data = await service.addItem(this.form);
+      this.$emit("baseTab", data);
     }
   }
 };

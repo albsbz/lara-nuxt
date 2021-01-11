@@ -33,6 +33,7 @@ const routes = [
   },
 
   { path: "/home", name: "home", component: page("home.vue") },
+  { path: "/all-categories", name: "catalog", component: page("catalog.vue") },
   { path: "/test", name: "test", component: page("test.vue") },
   {
     path: "/settings",

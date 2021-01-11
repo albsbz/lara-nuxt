@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\OAuthController;
 use App\Http\Controllers\Admin\ProductController;
@@ -72,6 +73,24 @@ Route::group(
                 Route::get('all', [ProductController::class, 'index']);
                 Route::delete('/', [ProductController::class, 'destroy']);
                 Route::post('edit', [ProductController::class, 'update']);
+            }
+        );
+        Route::group(
+            ['prefix' => 'user'],
+            function () {
+                Route::post('add', [AdminUser::class, 'store']);
+                Route::get('all', [AdminUser::class, 'index']);
+                Route::delete('/', [AdminUser::class, 'destroy']);
+                Route::post('edit', [AdminUser::class, 'update']);
+            }
+        );
+        Route::group(
+            ['prefix' => 'roles'],
+            function () {
+                Route::post('add', [RoleController::class, 'store']);
+                Route::get('all', [RoleController::class, 'index']);
+                Route::delete('/', [RoleController::class, 'destroy']);
+                Route::post('edit', [RoleController::class, 'update']);
             }
         );
     }

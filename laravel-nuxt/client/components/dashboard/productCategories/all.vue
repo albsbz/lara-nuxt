@@ -110,6 +110,7 @@
 </template>
 <script>
 import Form from "vform";
+import * as service from "~/services/ProductCategories";
 export default {
   props: ["allItems"],
   data: () => ({
@@ -164,8 +165,6 @@ export default {
     },
 
     deleteItem(item) {
-      // this.editedIndex = this.allItems.indexOf(item);
-      // this.editedItem = Object.assign({}, item);
       this.form = new Form(item);
       this.dialogDelete = true;
     },
@@ -178,7 +177,6 @@ export default {
     close() {
       this.dialog = false;
       this.$nextTick(() => {
-        // this.editedItem = Object.assign({}, this.defaultItem);
         this.form = new Form(this.defaultItem);
         this.editedIndex = -1;
       });
@@ -193,16 +191,11 @@ export default {
     },
 
     async save() {
-      try {
-        const { data } = await this.form.post(
-          "dashboard/product-category/edit"
-        );
-
+      const data = await service.editItem(this.form);
+      if (data) {
         this.$emit("baseTab", data);
-      } catch (e) {
-        return;
+        this.close();
       }
-      this.close();
     }
   }
 };

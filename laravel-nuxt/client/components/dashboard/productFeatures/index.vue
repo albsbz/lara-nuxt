@@ -18,7 +18,7 @@
       <v-tab-item value="list_product_features">
         <v-card flat>
           <All
-            :allItems="allItems"
+            :all-items="allItems"
             @deleteItem="deleteItem"
             @baseTab="baseTab"
           />
@@ -26,16 +26,16 @@
       </v-tab-item>
       <v-tab-item value="add_product_features">
         <v-card flat>
-          <Add :allItems="allItems" @baseTab="baseTab" />
+          <Add :all-items="allItems" @baseTab="baseTab" />
         </v-card>
       </v-tab-item>
     </v-tabs-items>
   </div>
 </template>
 <script>
-import axios from "axios";
 import Add from "./add";
 import All from "./all";
+import * as service from "~/services/ProductFeatures";
 export default {
   components: {
     Add,
@@ -52,12 +52,7 @@ export default {
   },
   methods: {
     async initialize() {
-      try {
-        const { data } = await axios.get("/dashboard/product-feature/all");
-        this.allItems = data; // if pagination needed
-      } catch (e) {
-        console.log(e);
-      }
+      this.allItems = await service.getAll();
     },
     baseTab(data) {
       if (this.tabs != "list_product_features") {
@@ -66,14 +61,7 @@ export default {
       this.allItems = data;
     },
     async deleteItem(id) {
-      try {
-        const { data } = await axios.delete("/dashboard/product-feature/", {
-          data: { id }
-        });
-        this.allItems = data; // if pagination needed
-      } catch (e) {
-        console.log(e);
-      }
+      this.allItems = await service.deleteItem(id);
     }
   }
 };

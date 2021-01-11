@@ -42,6 +42,7 @@
 </template>
 <script>
 import Form from "vform";
+import * as service from "~/services/ProductCategories";
 
 export default {
   props: ["allItems"],
@@ -56,15 +57,8 @@ export default {
 
   methods: {
     async addCategory() {
-      let data;
-
-      try {
-        const { data } = await this.form.post("dashboard/product-category/add");
-        // data = response.data
-        this.$emit("baseTab", data);
-      } catch (e) {
-        return;
-      }
+      const data = await service.addItem(this.form);
+      this.$emit("baseTab", data);
     }
   }
 };

@@ -83,6 +83,7 @@
 </template>
 <script>
 import Form from "vform";
+import * as service from "~/services/ProductFeatures";
 export default {
   props: ["allItems"],
   data: () => ({
@@ -154,14 +155,11 @@ export default {
     },
 
     async save() {
-      try {
-        const { data } = await this.form.post("dashboard/product-feature/edit");
-
+      const data = await service.editItem(this.form);
+      if (data) {
         this.$emit("baseTab", data);
-      } catch (e) {
-        return;
+        this.close();
       }
-      this.close();
     }
   }
 };

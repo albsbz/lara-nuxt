@@ -188,7 +188,9 @@
   </div>
 </template>
 <script>
-import axios from "axios";
+import * as service from "~/services/Products";
+import * as productFeatures from "~/services/ProductFeatures";
+import * as productCategories from "~/services/ProductCategories";
 import Form from "~/plugins/extendedFormFileUpload.js";
 import appProductGallery from "~/components/global/ProductGallery";
 
@@ -278,16 +280,8 @@ export default {
       }, "");
     },
     async initialize() {
-      try {
-        this.allFeatures = await (
-          await axios.get("/dashboard/product-feature/all")
-        ).data;
-        this.allCategories = await (
-          await axios.get("/dashboard/product-category/all")
-        ).data;
-      } catch (e) {
-        console.log(e);
-      }
+      this.allFeatures = await productFeatures.getAll();
+      this.allCategories = await productCategories.getAll();
     },
 
     async editItem(item) {
@@ -297,15 +291,12 @@ export default {
       const newItem = { ...item };
       newItem.featureValues = [];
       item.features.forEach(feature => {
-        // debugger;
         newItem.featureValues[feature.id] = feature.pivot.value;
       });
       newItem.features = item.features.map(feature => feature.id);
       this.form = new Form(newItem);
-      // this.imagesUrls = this.form.images.map(image => this.env + image.url);
       this.preUploadImages = [];
       this.preUploadImagesUrls = [];
-
       this.imagesSequence = this.form.images.map(image => ({
         url: image.url,
         id: image.id
@@ -369,26 +360,22 @@ export default {
     },
 
     async save() {
-      try {
-        this.form.images = [];
-        this.form.imagesSequence = [];
-        this.form.newImages = [];
-        this.imagesSequence.forEach((image, i) => {
-          this.form.imagesSequence.push(image.id);
-          if (image.id === null) {
-            this.form.newImages.push(image.file);
-          }
-          this.form.images.push(image.url);
-        });
-        console.log(this.form.newImages);
-        const { data } = await this.form.post("dashboard/product/edit");
+      this.form.images = [];
+      this.form.imagesSequence = [];
+      this.form.newImages = [];
+      this.imagesSequence.forEach((image, i) => {
+        this.form.imagesSequence.push(image.id);
+        if (image.id === null) {
+          this.form.newImages.push(image.file);
+        }
+        this.form.images.push(image.url);
+      });
 
+      const data = await service.editItem(this.form);
+      if (data) {
         this.$emit("baseTab", data);
-      } catch (e) {
-        console.log(e);
-        return;
+        this.close();
       }
-      this.close();
     },
     clearUploadField() {
       this.preUploadImages = [];
