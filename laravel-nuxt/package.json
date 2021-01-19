@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "nuxt -c client/nuxt.config.js",
+    "dev": "nuxt -c client/nuxt.config.js --port 3000",
     "build": "nuxt build -c client/nuxt.config.js",
     "start": "nuxt start -c client/nuxt.config.js",
     "lint": "eslint --fix --ext .js,.vue client/"

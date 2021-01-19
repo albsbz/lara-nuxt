@@ -23,7 +23,8 @@ export default {
   },
   data: () => ({
     linksData: {
-      Home: "welcome"
+      Home: "welcome",
+      Catalog: "catalog"
     }
   }),
   computed: {

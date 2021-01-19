@@ -7,14 +7,15 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\OAuthController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Admin\ProductFeatureController;
-use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\UserController as AdminUser;
+use App\Http\Controllers\Admin\ProductCategoryController as AdminProductCategory;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,15 @@ use App\Http\Controllers\Admin\UserController as AdminUser;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::group(
+    [
+        'prefix' => 'categories'
+    ],
+    function () {
+        Route::get('all', [ProductCategoryController::class, 'index']);
+    }
+);
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('logout', [LoginController::class, 'logout']);
@@ -51,10 +61,10 @@ Route::group(
         Route::group(
             ['prefix' => 'product-category'],
             function () {
-                Route::post('add', [ProductCategoryController::class, 'store']);
-                Route::get('all', [ProductCategoryController::class, 'index']);
-                Route::delete('/', [ProductCategoryController::class, 'destroy']);
-                Route::post('/edit', [ProductCategoryController::class, 'update']);
+                Route::post('add', [AdminProductCategory::class, 'store']);
+                Route::get('all', [AdminProductCategory::class, 'index']);
+                Route::delete('/', [AdminProductCategory::class, 'destroy']);
+                Route::post('/edit', [AdminProductCategory::class, 'update']);
             }
         );
         Route::group(

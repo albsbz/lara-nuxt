@@ -27,7 +27,7 @@ class ProductCategoryFactory extends Factory
             'name' => $name,
             'description' => $this->faker->realText(20),
             'slug' => $name,
-            'parent_id' => '1'
+            'url' => $this->faker->imageUrl(800, 600, 'cats'),
         ];
     }
 }

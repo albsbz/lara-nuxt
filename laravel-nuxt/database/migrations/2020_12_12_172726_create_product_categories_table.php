@@ -20,6 +20,7 @@ class CreateProductCategoriesTable extends Migration
             $table->foreign('parent_id')->references('id')->on('product_categories')->onDelete('SET DEFAULT');
             $table->string('name')->nullable();
             $table->string('description')->nullable();
+            $table->string('url')->nullable();
             $table->string('slug', 64)->unique()->nullable();
         });
     }

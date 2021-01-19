@@ -1,12 +1,13 @@
 <template>
   <div class="container">
+    Products
     <v-card-subtitle>
       {{ currentCategory.name }}
     </v-card-subtitle>
-    <n-link
+    <!-- < <n-link
       v-if="parentCategory"
       class="category"
-      :to="{ name: 'categories', params: { slug: parentCategory.slug } }"
+      :to="{ name: 'category', params: { slug: parentCategory.slug } }"
     >
       ...
     </n-link>
@@ -17,7 +18,7 @@
       :to="{ name: 'category', params: { slug: category.slug } }"
     >
       <v-img :src="category.url" />
-    </n-link>
+    </n-link> -->
   </div>
 </template>
 
@@ -34,41 +35,31 @@ export default {
     return { title: "All categories" };
   },
   computed: {
-    childCategories() {
-      return this.categories?.filter(
-        cat => cat.parent_id === this.currentCategory.id
-      );
-    },
     currentCategory() {
-      const slug = this.$route.params.slug;
-      let result;
-      if (!slug) {
-        result = this.categories.filter(cat => cat.id === 1)[0];
-      } else {
-        result = this.categories.filter(cat => cat.slug === slug)[0];
-      }
-      return result;
-    },
-    parentCategory() {
       return this.categories.filter(
-        cat => cat.id === this.currentCategory.parent_id
+        cat => cat.slug === this.$route.params.slug
       )[0];
     }
+    // parentCategory() {
+    //   return this.categories.filter(
+    //     cat => cat.id === this.currentCategory.parent_id
+    //   )[0];
+    // }
   },
   created() {
     const categories = this.$store.state.categories.categories;
     if (categories) {
       this.categories = this.$store.state.categories.categories;
     }
-  },
-  beforeMount() {
-    if (this.childCategories.length === 0) {
-      this.$router.push({
-        name: "category",
-        params: { category: this.currentCategory.slug }
-      });
-    }
   }
+  // beforeMount() {
+  //   if (this.childCategories.length === 0) {
+  //     this.$router.push({
+  //       name: "products",
+  //       params: { category: this.currentCategory.slug }
+  //     });
+  //   }
+  // }
 };
 </script>
 <style scoped>

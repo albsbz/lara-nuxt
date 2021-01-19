@@ -21,6 +21,14 @@ class ProductCategoriesTableSeeder extends Seeder
             'slug' => 'basic',
             'parent_id' => null
         ]);
-        ProductCategory::factory(20)->create();
+
+
+        for ($i = 1; $i <= 40; $i++) {
+        ProductCategory::factory(1)->create()->each(function ($category) {
+            $allCategories = ProductCategory::all()->except($category->id);
+            $category->parent()->associate($allCategories->random(1)->pluck('id')->toArray()[0]);
+            $category->save();
+        });
+    }
     }
 }
